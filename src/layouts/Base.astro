@@ -70,7 +70,8 @@ const jsonLd = {
       <div class="preview-bar" role="note">
         <div class="wrap">
           <strong>Preview · 预览版</strong>
-          <span>Draft for owner review. <mark class="pending-mark">Highlighted</mark> items are not confirmed yet, and the site is not taking bookings. 草稿供审阅，黄色标记的内容尚未确认。</span>
+          <span class="long">Draft for owner review. <mark class="pending-mark">Highlighted</mark> items are not confirmed yet, and the site is not taking bookings. 草稿供审阅，黄色标记的内容尚未确认。</span>
+          <span class="short"><mark class="pending-mark">Highlighted</mark> = not confirmed · 黄色 = 待确认</span>
         </div>
       </div>
     )}
@@ -94,6 +95,17 @@ const jsonLd = {
         </details>
       </div>
     </header>
+
+    <script>
+      // The mobile menu is a <details>; also close it on an outside tap or Escape.
+      const menu = document.querySelector<HTMLDetailsElement>('.nav-mobile');
+      if (menu) {
+        document.addEventListener('click', (e) => { if (menu.open && !menu.contains(e.target as Node)) menu.open = false; });
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && menu.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+        });
+      }
+    </script>
 
     <main id="main">
       <slot />
@@ -139,6 +151,8 @@ const jsonLd = {
   .preview-bar { background: #2a2418; color: #f5ecd9; font-size: 0.86rem; line-height: 1.45; }
   .preview-bar .wrap { display: flex; flex-wrap: wrap; gap: 4px 12px; padding-block: 8px; }
   .preview-bar .pending-mark { color: #2a2418; }
+  .preview-bar .short { display: none; }
+  @media (max-width: 640px) { .preview-bar .long { display: none; } .preview-bar .short { display: inline; } }
 
   .site-header { position: sticky; top: 0; z-index: 20; background: rgba(251, 248, 241, 0.92); backdrop-filter: saturate(1.2) blur(10px); border-bottom: 1px solid var(--line); }
   .bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 72px; }
