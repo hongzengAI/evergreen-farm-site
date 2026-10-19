@@ -1,0 +1,22 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { url } from '../config';
+---
+<Base title="Page not found" description="This page doesn't exist. Head back to the Evergreen Farm home page or check availability." noindex>
+  <PageHeader eyebrow="404" title="This path wandered off the trail">
+    <p class="lead">The page you're looking for isn't here. Try one of these instead.</p>
+  </PageHeader>
+  <section class="section">
+    <div class="wrap center">
+      <div class="actions centered">
+        <a class="btn" href={url('/')}>Home</a>
+        <a class="btn ghost" href={url('/availability/')}>Check availability</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .actions.centered { justify-content: center; margin-top: 0; }
+</style>

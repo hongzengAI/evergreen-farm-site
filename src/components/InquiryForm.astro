@@ -1,0 +1,264 @@
+---
+// Inquiry form. Field names follow spec.intake and schemas/inquiry.schema.json in evergreenAI.
+// Without JS it is a plain POST to the pipeline's intake endpoint, which answers 303 → /inquire/thanks/.
+// With JS it posts the same urlencoded body with fetch (a CORS "simple request", no preflight).
+// With no endpoint configured (preview), submitting shows what would have been sent.
+import { INQUIRY_ENDPOINT, url } from '../config';
+import { business, bandOptions, howHeardLabels, maxGuests } from '../data/site';
+import Pending from './Pending.astro';
+
+const preview = !INQUIRY_ENDPOINT;
+const howHeard = business.intake.how_heard;
+const attribution = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'referrer', 'landing_page', 'page', 'started_at'];
+const email = business.business.email;
+---
+<form
+  id="inquiry"
+  class="inquiry"
+  method="post"
+  action={INQUIRY_ENDPOINT || undefined}
+  data-preview={preview ? 'true' : 'false'}
+  data-max-guests={maxGuests}
+  data-email={email ?? ''}
+>
+  <fieldset>
+    <legend>Your celebration</legend>
+
+    <div class="field">
+      <span class="label" id="type-label">What are you planning? <span class="req" aria-hidden="true">*</span></span>
+      <div class="choices" role="radiogroup" aria-labelledby="type-label">
+        <label class="choice"><input type="radio" name="event_type" value="wedding" required /> <span>A wedding</span></label>
+        <label class="choice"><input type="radio" name="event_type" value="small_event" /> <span>Another celebration or event</span></label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="event_date">Preferred date</label>
+        <input id="event_date" name="event_date" type="date" aria-describedby="date-hint" />
+        <p class="hint" id="date-hint">Leave blank if you're flexible, and tell us below.</p>
+      </div>
+      <div class="field">
+        <label for="date_notes">Other dates or flexibility</label>
+        <input id="date_notes" name="date_notes" type="text" maxlength="200" placeholder="e.g. any Saturday in September 2027" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="guest_count">Estimated guests <span class="req" aria-hidden="true">*</span></label>
+        <input id="guest_count" name="guest_count" type="number" inputmode="numeric" min="1" max="1000" required aria-describedby="guest-hint" />
+        <p class="hint" id="guest-hint">A rough number is fine. We host up to {maxGuests} guests.</p>
+        <p class="hint warn" id="guest-note" hidden>That's more than our {maxGuests}-guest limit. You're welcome to send your inquiry and we'll let you know honestly whether the farm can work.</p>
+      </div>
+      <div class="field">
+        <label for="budget_band">Overall budget <span class="req" aria-hidden="true">*</span></label>
+        <select id="budget_band" name="budget_band" required>
+          <option value="">Choose one</option>
+          <option value="unsure">Not sure yet</option>
+          <optgroup label="Wedding" data-stream="wedding">
+            {bandOptions('wedding').map((b) => <option value={`wedding:${b.value}`}>{b.label}</option>)}
+          </optgroup>
+          <optgroup label="Other events" data-stream="small_event">
+            {bandOptions('small_event').map((b) => <option value={`small_event:${b.value}`}>{b.label}</option>)}
+          </optgroup>
+        </select>
+      </div>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>About you</legend>
+    <div class="row">
+      <div class="field">
+        <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="120" required />
+      </div>
+      <div class="field">
+        <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+        <input id="email" name="email" type="email" autocomplete="email" maxlength="200" required />
+      </div>
+    </div>
+    <div class="row">
+      <div class="field">
+        <label for="phone">Phone <span class="opt">(optional)</span></label>
+        <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="30" />
+      </div>
+      <div class="field">
+        <label for="how_heard">How did you hear about us? <span class="opt">(optional)</span></label>
+        <select id="how_heard" name="how_heard">
+          <option value="">Choose one</option>
+          {howHeard.map((h) => <option value={h}>{howHeardLabels[h] ?? h}</option>)}
+        </select>
+        {!business.intake.how_heard_confirmed && <p class="hint"><Pending id="intake.how_heard" label="Option list to confirm" inline /></p>}
+      </div>
+    </div>
+    <label class="consent">
+      <input type="checkbox" name="sms_consent" value="yes" />
+      <span>Text me about my inquiry and event (optional). Message frequency varies. Msg &amp; data rates may apply. Reply STOP to opt out or HELP for help. Consent is not required to book. See our <a href={url('/sms-terms/')}>SMS terms</a> and <a href={url('/privacy/')}>privacy policy</a>.</span>
+    </label>
+    <div class="field">
+      <label for="message">Anything else we should know? <span class="opt">(optional)</span></label>
+      <textarea id="message" name="message" rows="4" maxlength="2000"></textarea>
+    </div>
+  </fieldset>
+
+  <div class="hp" aria-hidden="true">
+    <label for="company_website">Leave this field empty</label>
+    <input id="company_website" name="company_website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  {attribution.map((n) => <input type="hidden" name={n} />)}
+
+  <div class="submit">
+    <button class="btn" type="submit">Send inquiry</button>
+    <p class="hint">We'll use your details only to reply about your celebration. <a href={url('/privacy/')}>Privacy</a></p>
+  </div>
+  <p class="status" role="status" aria-live="polite"></p>
+</form>
+
+<div class="sent card" id="inquiry-sent" tabindex="-1" hidden>
+  <h2>Thank you!</h2>
+  <p>We've received your inquiry and will reply by email.</p>
+</div>
+
+<div class="sent card preview-result" id="inquiry-preview" tabindex="-1" hidden>
+  <span class="tag">Preview · 预览</span>
+  <h2>Nothing was sent</h2>
+  <p>This preview isn't connected to the venue inbox yet. Once it is, this is what the inbox will receive:</p>
+  <dl></dl>
+  <button class="btn ghost" type="button" data-reset>Edit the form</button>
+</div>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('#inquiry');
+  if (form) {
+    const field = (n: string) => form.elements.namedItem(n) as HTMLInputElement;
+    const params = new URLSearchParams(location.search);
+    const date = params.get('date');
+    if (date && /^\d{4}-\d{2}-\d{2}$/.test(date)) field('event_date').value = date;
+    const type = params.get('type');
+    const typeInput = form.querySelector<HTMLInputElement>(`input[name="event_type"][value="${type}"]`);
+    if (typeInput) typeInput.checked = true;
+
+    try {
+      const a = JSON.parse(sessionStorage.getItem('ef_attrib') || '{}');
+      for (const [k, v] of Object.entries(a)) if (form.elements.namedItem(k)) field(k).value = String(v);
+    } catch {}
+    field('page').value = location.pathname;
+    field('started_at').value = String(Date.now());
+
+    // Budget options follow the event type.
+    const budget = form.querySelector<HTMLSelectElement>('#budget_band')!;
+    const syncBudget = () => {
+      const t = form.querySelector<HTMLInputElement>('input[name="event_type"]:checked')?.value;
+      budget.querySelectorAll('optgroup').forEach((g) => {
+        const show = !t || g.dataset.stream === t;
+        g.hidden = !show;
+        g.disabled = !show;
+      });
+      const chosen = budget.selectedOptions[0];
+      if (chosen?.parentElement instanceof HTMLOptGroupElement && chosen.parentElement.disabled) budget.value = '';
+    };
+    form.addEventListener('change', (e) => { if ((e.target as HTMLInputElement).name === 'event_type') syncBudget(); });
+    syncBudget();
+
+    const max = Number(form.dataset.maxGuests);
+    const guests = field('guest_count');
+    const note = form.querySelector<HTMLElement>('#guest-note')!;
+    guests.addEventListener('input', () => { note.hidden = !(Number(guests.value) > max); });
+
+    // A preferred date or a note about flexible dates is required (spec.intake: date_or_range).
+    const dateEl = field('event_date');
+    const notesEl = field('date_notes');
+    const checkDate = () => dateEl.setCustomValidity(dateEl.value || notesEl.value.trim() ? '' : 'Add a preferred date, or tell us your flexible dates in the next box.');
+    dateEl.addEventListener('input', checkDate);
+    notesEl.addEventListener('input', checkDate);
+    checkDate();
+
+    const status = form.querySelector<HTMLElement>('.status')!;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = new URLSearchParams();
+      new FormData(form).forEach((v, k) => body.append(k, String(v)));
+
+      if (form.dataset.preview === 'true') {
+        const panel = document.querySelector<HTMLElement>('#inquiry-preview')!;
+        const dl = panel.querySelector('dl')!;
+        dl.replaceChildren();
+        body.forEach((v, k) => {
+          if (!v || k === 'started_at') return;
+          const dt = document.createElement('dt');
+          const dd = document.createElement('dd');
+          dt.textContent = k;
+          dd.textContent = v;
+          dl.append(dt, dd);
+        });
+        form.hidden = true;
+        panel.hidden = false;
+        panel.focus();
+        panel.querySelector('[data-reset]')!.addEventListener('click', () => { panel.hidden = true; form.hidden = false; }, { once: true });
+        return;
+      }
+
+      button.disabled = true;
+      status.textContent = 'Sending…';
+      try {
+        const res = await fetch(form.action, { method: 'POST', body, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        form.hidden = true;
+        const sent = document.querySelector<HTMLElement>('#inquiry-sent')!;
+        sent.hidden = false;
+        sent.focus();
+        const gtag = (window as unknown as { gtag?: (...a: unknown[]) => void }).gtag;
+        gtag?.('event', 'generate_lead', { event_type: body.get('event_type') });
+      } catch {
+        const email = form.dataset.email;
+        status.textContent = `Sorry, that didn't go through. Please try again in a moment${email ? `, or email us at ${email}` : ''}.`;
+        button.disabled = false;
+      }
+    });
+  }
+</script>
+
+<style>
+  .inquiry { display: grid; gap: 28px; }
+  fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 18px; }
+  legend { font: 500 1.35rem/1.2 var(--serif); color: var(--evergreen); padding: 0; margin-bottom: 14px; }
+  .row { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+  .field { display: grid; gap: 6px; align-content: start; }
+  label, .label { font-weight: 600; font-size: 0.95rem; color: var(--ink); }
+  .req { color: var(--wheat); }
+  .opt { font-weight: 400; color: var(--muted); }
+  input[type='text'], input[type='email'], input[type='tel'], input[type='number'], input[type='date'], select, textarea {
+    width: 100%;
+    min-height: 48px;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--ink);
+    background: #fff;
+    border: 1.5px solid #cfc5ae;
+    border-radius: 10px;
+  }
+  textarea { resize: vertical; min-height: 110px; }
+  input:focus-visible, select:focus-visible, textarea:focus-visible { border-color: var(--evergreen); outline: 3px solid rgba(168, 121, 47, 0.45); outline-offset: 1px; }
+  .hint { font-size: 0.86rem; color: var(--muted); margin: 0; }
+  .hint.warn { color: var(--pending); }
+  .choices { display: flex; flex-wrap: wrap; gap: 10px; }
+  .choice { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 16px; border: 1.5px solid #cfc5ae; border-radius: 999px; background: #fff; font-weight: 500; cursor: pointer; }
+  .choice:has(input:checked) { border-color: var(--evergreen); background: #edf1e6; }
+  .choice input { width: 18px; height: 18px; accent-color: var(--evergreen); margin: 0; }
+  .consent { display: grid; grid-template-columns: 24px 1fr; gap: 10px; font-weight: 400; font-size: 0.88rem; color: var(--ink-soft); line-height: 1.5; }
+  .consent input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--evergreen); }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .submit { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px; }
+  .status:empty { display: none; }
+  .status { color: var(--pending); font-weight: 600; margin: 0; }
+  .sent h2 { margin-bottom: 0.3em; }
+  .sent:focus { outline: none; }
+  .preview-result .tag { display: inline-block; font: 600 0.72rem/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--pending); background: var(--pending-bg); border-radius: 999px; padding: 5px 9px; margin-bottom: 12px; }
+  .preview-result dl { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; margin: 0 0 20px; font-size: 0.92rem; }
+  .preview-result :global(dt) { color: var(--muted); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.82rem; padding-top: 2px; }
+  .preview-result :global(dd) { margin: 0; overflow-wrap: anywhere; }
+</style>

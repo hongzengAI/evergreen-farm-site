@@ -1,0 +1,46 @@
+---
+// Terms carriers expect to see for A2P 10DLC registration (WP02 in evergreenAI): program name,
+// message types, frequency, rates, STOP/HELP, consent not required, privacy link.
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Pending from '../components/Pending.astro';
+import { url } from '../config';
+import { business } from '../data/site';
+
+const email = business.business.email;
+---
+<Base title="SMS terms" description="Terms for Evergreen Farm text messages: what we send, how often, message and data rates, and how to opt out with STOP or get help with HELP.">
+  <PageHeader eyebrow="Policies" title="SMS terms">
+    <p class="lead">These terms apply to text messages from Evergreen Farm.</p>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap prose">
+      <Pending id="legal.review" label="Draft legal text. Have it reviewed before launch and before the Twilio campaign is filed." zh="法律文本草稿，上线和提交 Twilio 短信申请前需审阅" />
+
+      <h2>Program</h2>
+      <p><strong>Evergreen Farm inquiry and event messages.</strong> If you opt in on our inquiry form, we may text you about your inquiry: replies to your questions, tour confirmations and reminders, and, once you book, reminders about your event and payments.</p>
+
+      <h2>How to opt in</h2>
+      <p>Check the box labeled "Text me about my inquiry and event" on our <a href={url('/inquire/')}>inquiry form</a> and give your mobile number. The box is never pre-checked, and consent to texts is not a condition of booking.</p>
+
+      <h2>Message frequency and cost</h2>
+      <p>Message frequency varies with your inquiry and event, typically a few messages a month. Message and data rates may apply. We send texts between 8 a.m. and 9 p.m. in your local time.</p>
+
+      <h2>How to stop or get help</h2>
+      <ul>
+        <li>Reply <strong>STOP</strong> to any message to stop receiving texts. We'll send one message confirming you've been unsubscribed.</li>
+        <li>Reply <strong>HELP</strong> for help, or email us at {email ? <a href={`mailto:${email}`}>{email}</a> : <Pending id="business.email" label="venue email address" inline />}.</li>
+      </ul>
+
+      <h2>Other terms</h2>
+      <p>Carriers are not liable for delayed or undelivered messages. Your information is handled as described in our <a href={url('/privacy/')}>privacy policy</a>. Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes.</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prose { max-width: 760px; }
+  .prose h2 { font-size: clamp(1.35rem, 1vw + 1rem, 1.7rem); margin-top: 1.8em; }
+  .prose ul { padding-left: 1.2em; display: grid; gap: 8px; margin: 0 0 1em; }
+</style>

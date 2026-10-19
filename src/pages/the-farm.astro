@@ -1,0 +1,91 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Fact from '../components/Fact.astro';
+import Pending from '../components/Pending.astro';
+import Photo from '../components/Photo.astro';
+import { url } from '../config';
+import { place, maxGuests } from '../data/site';
+
+const spaces = [
+  { id: 'spaces.ceremony', title: 'Ceremony', label: 'Ceremony sites and how many guests each seats', slot: 'ceremony', caption: 'Ceremony site, late-afternoon light, guests seated', required: true },
+  { id: 'spaces.reception', title: 'Reception', label: 'Reception space (barn, tent or outdoors) and capacity', slot: 'reception', caption: 'Reception set for dinner before guests arrive', required: true },
+  { id: 'spaces.rain_plan', title: 'Rain plan', label: 'Backup plan for rain, and indoor capacity', slot: 'rain-plan', caption: 'The covered or indoor backup space', required: false },
+  { id: 'spaces.getting_ready', title: 'Getting ready', label: 'Getting-ready rooms for the couple and wedding party', slot: 'getting-ready', caption: 'Getting-ready room, natural window light', required: false },
+];
+---
+<Base title="The farm" description={`The spaces, lodging and location of Evergreen Farm, a farm venue for weddings and events near ${place.short} for up to ${maxGuests} guests.`}>
+  <PageHeader eyebrow="The farm" title="Welcome to Evergreen Farm">
+    <Fact id="brand.story" label="The farm's story: its history, the family, and why it opens for celebrations" />
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">Spaces</p>
+      <h2>Where the day happens</h2>
+      <div class="grid two spaces">
+        {spaces.map((s) => (
+          <article class="space">
+            <Photo slot={s.slot} alt={`${s.title} at Evergreen Farm`} caption={s.caption} ratio="3 / 2" required={s.required} />
+            <h3>{s.title}</h3>
+            <Fact id={s.id} label={s.label} />
+          </article>
+        ))}
+      </div>
+      <div class="grid two practical">
+        <div><h3>Restrooms</h3><Fact id="spaces.restrooms" label="Number and location of restrooms" /></div>
+        <div><h3>Parking</h3><Fact id="spaces.parking" label="Parking spaces, and whether a shuttle is needed" /></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section tint" id="residence">
+    <div class="wrap split">
+      <Photo slot="residence" alt="The Residence, on-site lodging at Evergreen Farm" caption="The Residence from outside, warm evening light" required />
+      <div>
+        <p class="eyebrow">Lodging</p>
+        <h2>The Residence</h2>
+        <Fact id="lodging.available" />
+        <Fact id="lodging.residence_details" label="Bedrooms, how many it sleeps, check-in and check-out" />
+        <Fact id="lodging.residence_rate" label="Rate for event guests, or whether it's included in a package" />
+        <Pending id="lodging.vrbo_link" label="Link to the Residence on Vrbo" zh="Residence 的 Vrbo 链接" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="location">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Location</p>
+        <h2>Finding the farm</h2>
+        <p class="lead"><Fact id="location.area" inline>Evergreen Farm is in the Charlottesville, Virginia area.</Fact></p>
+        <Fact id="location.address" label="Street address and drive time from downtown Charlottesville" />
+        <Fact id="location.directions" label="Directions: turns to watch for, unpaved stretches, cell signal" />
+        <Fact id="location.nearby" label="Nearest hotels and airport, with drive times" />
+      </div>
+      <Photo slot="aerial" alt="The farm from above" caption="Drone view of the property and the ridge line" ratio="4 / 3" />
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap center">
+      <h2>See it for yourself</h2>
+      <p class="lead">Photos only go so far. Come walk the farm with us.</p>
+      <div class="actions centered">
+        <a class="btn" href={url('/availability/')}>Check availability</a>
+        <a class="btn ghost" href={url('/inquire/')}>Send an inquiry</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .spaces { margin-top: 12px; }
+  .space { display: grid; gap: 12px; align-content: start; }
+  .space h3 { margin: 6px 0 0; }
+  .practical { margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--line); }
+  #location .lead :global(p) { margin: 0; }
+  .actions.centered { justify-content: center; }
+  #location > .wrap > div { display: grid; gap: 14px; align-content: start; }
+  #residence .wrap > div { display: grid; gap: 14px; align-content: start; }
+</style>

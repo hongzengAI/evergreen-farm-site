@@ -1,0 +1,24 @@
+---
+// Landing page for the no-JavaScript path: the intake endpoint answers a plain form POST with
+// 303 See Other to this page.
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { url } from '../../config';
+---
+<Base title="Thank you" description="Your inquiry to Evergreen Farm has been received. We reply by email." noindex>
+  <PageHeader eyebrow="Inquiry received" title="Thank you!">
+    <p class="lead">We've received your inquiry and will reply by email. Keep an eye on your inbox, and check your spam folder just in case.</p>
+  </PageHeader>
+  <section class="section">
+    <div class="wrap center">
+      <div class="actions centered">
+        <a class="btn" href={url('/gallery/')}>Browse the gallery</a>
+        <a class="btn ghost" href={url('/faq/')}>Read the FAQ</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .actions.centered { justify-content: center; margin-top: 0; }
+</style>

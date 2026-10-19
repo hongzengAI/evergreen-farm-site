@@ -1,0 +1,15 @@
+---
+// Placeholder for information the owner hasn't supplied yet. Shows the English topic and,
+// for the owner's review, the Chinese question from facts.yaml.
+interface Props { id: string; label: string; zh?: string; inline?: boolean }
+const { id, label, zh, inline = false } = Astro.props;
+---
+{inline
+  ? <mark class="pending-mark" data-pending={id} title="To confirm · 待确认">{label}</mark>
+  : (
+    <div class="pending-block" data-pending={id}>
+      <span class="tag">To confirm · 待确认</span>
+      <p>{label}</p>
+      {zh && <p class="zh">{zh}</p>}
+    </div>
+  )}

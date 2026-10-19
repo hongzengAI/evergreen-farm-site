@@ -1,0 +1,80 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import MonthGrid from '../components/MonthGrid.astro';
+import Pending from '../components/Pending.astro';
+import { url, tourHref } from '../config';
+import availability from '../data/availability.json';
+
+const HORIZON = 18;
+const SHOWN = 6;
+const now = new Date();
+const today = now.toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+const [y0, m0] = today.split('-').map(Number);
+const months = Array.from({ length: HORIZON }, (_, i) => ({ year: y0 + Math.floor((m0 - 1 + i) / 12), month: (m0 - 1 + i) % 12 }));
+const booked = new Set<string>(availability.booked);
+---
+<Base title="Availability" description="See which dates are open at Evergreen Farm for the next 18 months, then send an inquiry about the date you like.">
+  <PageHeader eyebrow="Availability" title="Find your date">
+    <p class="lead">Booked dates for the next {HORIZON} months. Every other date is open to inquire about. Tap a date to start an inquiry.</p>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap">
+      {availability.sample && (
+        <Pending id="availability.sample" label="Sample dates for the preview. The live calendar comes from the venue's Google Calendar." zh="示例日期，上线后自动显示 Google 日历中的真实预订" />
+      )}
+      <div class="legend" aria-hidden="true">
+        <span><i class="open"></i> Open</span>
+        <span><i class="wk"></i> Open weekend day</span>
+        <span><i class="booked"></i> Booked</span>
+      </div>
+      <div class="months">
+        {months.slice(0, SHOWN).map((m) => <MonthGrid year={m.year} month={m.month} booked={booked} today={today} />)}
+      </div>
+      <details class="more">
+        <summary>Show {HORIZON - SHOWN} more months</summary>
+        <div class="months">
+          {months.slice(SHOWN).map((m) => <MonthGrid year={m.year} month={m.month} booked={booked} today={today} />)}
+        </div>
+      </details>
+      <p class="muted small fine">An open date isn't reserved until your booking is confirmed with a signed contract and deposit. Updated {new Date(availability.generated_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'America/New_York' })}.</p>
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap center">
+      <h2>See a date you like?</h2>
+      <p class="lead">Tell us about your plans and we'll reply by email.</p>
+      <div class="actions centered">
+        <a class="btn" href={url('/inquire/')}>Send an inquiry</a>
+        <a class="btn ghost" href={tourHref}>Book a tour</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // The page is rebuilt nightly; this greys out days that have passed since the last build.
+  const today = new Date().toLocaleDateString('en-CA', { timeZone: 'America/New_York' });
+  document.querySelectorAll<HTMLElement>('td[data-date]').forEach((td) => {
+    if (td.dataset.date! < today && !td.classList.contains('past')) {
+      td.className = 'past';
+      td.innerHTML = `<span>${Number(td.dataset.date!.slice(8))}</span>`;
+    }
+  });
+</script>
+
+<style>
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 8px 0 20px; font-size: 0.9rem; color: var(--ink-soft); }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend i { width: 18px; height: 18px; border-radius: 5px; border: 1px solid var(--line); background: #fff; }
+  .legend i.wk { background: #edf1e6; }
+  .legend i.booked { background: repeating-linear-gradient(135deg, #f1e8d6 0 5px, #e8dcc4 5px 6px); }
+  .months { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+  .more { margin-top: 24px; }
+  .more summary { cursor: pointer; display: inline-flex; min-height: 48px; align-items: center; padding: 10px 20px; border: 1.5px solid var(--evergreen); border-radius: 999px; color: var(--evergreen); font-weight: 600; margin-bottom: 18px; }
+  .more[open] summary { margin-bottom: 18px; }
+  .fine { margin-top: 24px; }
+  .actions.centered { justify-content: center; }
+</style>

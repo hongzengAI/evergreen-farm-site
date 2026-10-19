@@ -1,0 +1,29 @@
+{
+  "sample": true,
+  "generated_at": "2026-10-18T12:00:00Z",
+  "source": "Sample data for the preview. The pipeline (availability_view) replaces this file with booked days from Google Calendar; wedding weekends are listed as each booked day (Fri-Sun).",
+  "booked": [
+    "2026-11-07",
+    "2027-04-23",
+    "2027-04-24",
+    "2027-04-25",
+    "2027-05-14",
+    "2027-05-15",
+    "2027-05-16",
+    "2027-05-28",
+    "2027-05-29",
+    "2027-05-30",
+    "2027-06-11",
+    "2027-06-12",
+    "2027-06-13",
+    "2027-09-17",
+    "2027-09-18",
+    "2027-09-19",
+    "2027-10-08",
+    "2027-10-09",
+    "2027-10-10",
+    "2027-10-15",
+    "2027-10-16",
+    "2027-10-17"
+  ]
+}

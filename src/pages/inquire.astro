@@ -1,0 +1,51 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Fact from '../components/Fact.astro';
+import InquiryForm from '../components/InquiryForm.astro';
+import { url, tourHref } from '../config';
+---
+<Base title="Inquire" description="Tell us about your wedding or event at Evergreen Farm: your date, guest count and budget. We reply by email.">
+  <PageHeader eyebrow="Inquire" title="Tell us about your celebration">
+    <Fact id="contact.email_only"><p class="lead">Share a few details and we'll reply by email. It takes about two minutes.</p></Fact>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap layout">
+      <div class="card form-card">
+        <InquiryForm />
+      </div>
+      <aside class="next" aria-labelledby="next-h">
+        <h2 id="next-h">What happens next</h2>
+        <ol>
+          <li>
+            <h3>We reply by email</h3>
+            <Fact id="contact.email_only" />
+          </li>
+          <li>
+            <h3>Come see the farm</h3>
+            <p>Walk the grounds with us and ask everything. <a href={tourHref}>Book a tour</a> whenever you're ready.</p>
+          </li>
+          <li>
+            <h3>Reserve your date</h3>
+            <Fact id="payment.structure" />
+          </li>
+        </ol>
+        <p class="small muted">Want to check dates first? <a href={url('/availability/')}>See availability</a>.</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .layout { display: grid; gap: clamp(28px, 4vw, 56px); grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); align-items: start; }
+  .form-card { padding: clamp(20px, 3vw, 40px); }
+  .next { position: sticky; top: 96px; }
+  .next h2 { font-size: 1.6rem; }
+  .next ol { list-style: none; padding: 0; margin: 0 0 24px; counter-reset: step; display: grid; gap: 22px; }
+  .next li { counter-increment: step; display: grid; grid-template-columns: 36px 1fr; column-gap: 14px; }
+  .next li::before { content: counter(step); grid-row: span 2; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--wheat-soft); color: var(--evergreen); font-weight: 700; font-size: 0.9rem; }
+  .next h3 { font-size: 1.15rem; margin: 4px 0 4px; }
+  .next li :global(p) { margin: 0; color: var(--ink-soft); font-size: 0.97rem; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .next { position: static; } }
+</style>

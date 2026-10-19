@@ -1,0 +1,52 @@
+---
+// One month of the open/booked view. Booked days come from availability.json (exported by the
+// pipeline from Google Calendar); every other future day links to the form with the date filled in.
+import { url } from '../config';
+
+interface Props { year: number; month: number; booked: Set<string>; today: string }
+const { year, month, booked, today } = Astro.props;
+
+const pad = (n: number) => String(n).padStart(2, '0');
+const first = new Date(Date.UTC(year, month, 1));
+const daysInMonth = new Date(Date.UTC(year, month + 1, 0)).getUTCDate();
+const lead = first.getUTCDay();
+const cells: (number | null)[] = [...Array(lead).fill(null), ...Array.from({ length: daysInMonth }, (_, i) => i + 1)];
+while (cells.length % 7) cells.push(null);
+const weeks = Array.from({ length: cells.length / 7 }, (_, w) => cells.slice(w * 7, w * 7 + 7));
+const title = first.toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const long = (iso: string) => new Date(`${iso}T12:00:00Z`).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+const dow = [['S', 'Sunday'], ['M', 'Monday'], ['T', 'Tuesday'], ['W', 'Wednesday'], ['T', 'Thursday'], ['F', 'Friday'], ['S', 'Saturday']];
+---
+<table class="month">
+  <caption>{title}</caption>
+  <thead><tr>{dow.map(([s, l]) => <th scope="col"><abbr title={l}>{s}</abbr></th>)}</tr></thead>
+  <tbody>
+    {weeks.map((week) => (
+      <tr>
+        {week.map((d, i) => {
+          if (d === null) return <td></td>;
+          const iso = `${year}-${pad(month + 1)}-${pad(d)}`;
+          const weekend = i === 0 || i >= 5;
+          if (iso < today) return <td class="past" data-date={iso}><span>{d}</span></td>;
+          if (booked.has(iso)) return <td class={`booked${weekend ? ' wk' : ''}`} data-date={iso}><span aria-hidden="true">{d}</span><span class="sr-only">{long(iso)}, booked</span></td>;
+          return <td class={weekend ? 'wk' : ''} data-date={iso}><a href={url(`/inquire/?date=${iso}`)} aria-label={`${long(iso)}, open. Inquire about this date`}>{d}</a></td>;
+        })}
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<style>
+  .month { width: 100%; border-collapse: separate; border-spacing: 3px; font-size: 0.92rem; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 8px 12px; }
+  caption { font: 500 1.15rem/1.2 var(--serif); color: var(--evergreen); text-align: left; padding: 0 4px 10px; caption-side: top; }
+  th { font: 600 0.72rem/1 var(--sans); color: var(--muted); padding: 4px 0 6px; }
+  th abbr { text-decoration: none; }
+  td { text-align: center; padding: 0; height: 38px; border-radius: 8px; }
+  td a, td > span:first-child { display: grid; place-items: center; height: 100%; min-height: 36px; border-radius: 8px; }
+  td a { color: var(--evergreen); text-decoration: none; font-weight: 500; }
+  td a:hover { background: var(--evergreen); color: #fbf8f1; }
+  td.wk a { background: #edf1e6; }
+  td.wk a:hover { background: var(--evergreen); }
+  td.booked span[aria-hidden] { color: #9c8f7a; text-decoration: line-through; background: repeating-linear-gradient(135deg, #f1e8d6 0 5px, #e8dcc4 5px 6px); }
+  td.past span { color: #767062; font-weight: 400; }
+</style>

@@ -1,0 +1,22 @@
+---
+// Illustrated ridge line and evergreens: the hero's designed fallback until a real hero photo
+// exists, and a quiet divider elsewhere. Paths are generated (seeded) once, not by hand.
+import p from './landscape-paths.json';
+interface Props { class?: string; sun?: boolean; sky?: boolean }
+const { class: cls = '', sun = true, sky = true } = Astro.props;
+---
+<svg class={`landscape ${cls}`} viewBox="0 0 1440 640" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6eedd" />
+      <stop offset="0.75" stop-color="#f3e3c3" />
+    </linearGradient>
+  </defs>
+  {sky && <rect width="1440" height="640" fill="url(#sky)" />}
+  {sun && <circle cx="1060" cy="330" r="74" fill="#efd39b" opacity="0.75" />}
+  <path d={p.far} fill="#a9b9a0" opacity="0.7" />
+  <path d={p.mid} fill="#6f8b60" />
+  <path d={p.trees_mid} fill="#2d5541" />
+  <path d={p.near} fill="#1f3d2b" />
+  <path d={p.trees_near} fill="#173023" />
+</svg>

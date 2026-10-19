@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Fact from '../components/Fact.astro';
+import Pending from '../components/Pending.astro';
+import Photo from '../components/Photo.astro';
+import { url, tourHref } from '../config';
+import { business, packages, usd, weddingMin, weddingMax, maxGuests } from '../data/site';
+
+const priced = business.generated.offers_status === 'active';
+const included = [
+  { id: 'inclusions.furniture', label: 'Tables, chairs, linens and tableware in each package' },
+  { id: 'inclusions.setup_teardown', label: 'Setup and teardown window, and who handles it' },
+  { id: 'inclusions.rehearsal', label: 'Rehearsal time and a rehearsal dinner space' },
+  { id: 'inclusions.staff', label: 'Whether a venue lead is on site on the day' },
+];
+---
+<Base title="Weddings" description={`Farm weddings for up to ${maxGuests} guests, one wedding per weekend. Four packages from ${usd(weddingMin)} to ${usd(weddingMax)}, with lodging on site.`}>
+  <PageHeader eyebrow="Weddings" title="A wedding weekend on the farm">
+    <Fact id="schedule.one_wedding_per_weekend"><p class="lead">We host only one wedding per weekend, so the farm is yours for the whole stay: your ceremony, your celebration and your people, with no one else's event next door.</p></Fact>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="price-band">
+        <div>
+          <p class="eyebrow">Packages</p>
+          <h2>Four ways to celebrate</h2>
+        </div>
+        <Fact id="pricing.wedding_range">
+          <p class="range"><span>From</span> {usd(weddingMin)} <span>to</span> {usd(weddingMax)}</p>
+        </Fact>
+      </div>
+      <div class="grid four packages">
+        {packages.map((p, i) => (
+          <article class="card pkg">
+            <span class="n">0{i + 1}</span>
+            <h3>{p.name}</h3>
+            {priced && p.price_usd
+              ? <p class="price">{usd(p.price_usd)}</p>
+              : <Pending id={`offers.${p.id}`} label="Price, length and inclusions from the wedding handbook" zh="婚礼手册：价格、天数和包含内容" />}
+          </article>
+        ))}
+      </div>
+      <p class="muted small note">Every package is for up to {maxGuests} guests. Ask us which one fits your plans; we're happy to talk it through on a tour.</p>
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Weekend packages</p>
+        <h2>Friday to Sunday, and Monday if you like</h2>
+        <Fact id="schedule.weekend_span" />
+        <Fact id="schedule.one_wedding_per_weekend"><p>Because there's only one wedding each weekend, you can take your time: settle in on Friday, celebrate, and say your goodbyes without anyone waiting for the space.</p></Fact>
+      </div>
+      <Photo slot="reception" alt="A reception set for dinner on the farm" caption="Reception set for dinner before guests arrive" required />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p class="eyebrow">What's included</p>
+      <h2>The details, package by package</h2>
+      <div class="grid two included">
+        {included.map((x) => <Fact id={x.id} label={x.label} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap grid two">
+      <div class="card">
+        <h3>Food and drink</h3>
+        <Fact id="catering.external" />
+        <Fact id="rules.alcohol" label="Alcohol policy: bring your own, licensed bartender, insurance" />
+      </div>
+      <div class="card">
+        <h3>Stay on the farm</h3>
+        <Fact id="lodging.available" />
+        <p><a href={url('/the-farm/#residence')}>About the Residence →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap center">
+      <h2>Find your date</h2>
+      <Fact id="booking.lead_time"><p class="lead light">Most couples book 12 to 18 months ahead, and spring and fall Saturdays go first.</p></Fact>
+      <div class="actions centered">
+        <a class="btn light" href={url('/availability/')}>Check availability</a>
+        <a class="btn ghost light-ghost" href={tourHref}>Book a tour</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .price-band { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 16px 40px; margin-bottom: 32px; }
+  .price-band h2 { margin: 0; }
+  .range { font: 450 clamp(1.8rem, 2vw + 1rem, 2.6rem)/1.1 var(--serif); color: var(--evergreen); margin: 0; }
+  .range span { font: 500 0.95rem/1 var(--sans); color: var(--muted); }
+  .pkg { display: grid; align-content: start; gap: 10px; }
+  .pkg .n { font: 600 0.78rem/1 var(--sans); color: var(--wheat); letter-spacing: 0.08em; }
+  .pkg h3 { margin: 0; }
+  .price { font: 500 1.3rem/1 var(--serif); color: var(--evergreen); }
+  .note { margin-top: 24px; }
+  .included { margin-top: 12px; }
+  .dark .lead.light { color: #d9dfd5; }
+  .actions.centered { justify-content: center; }
+  .light-ghost { color: #fbf8f1; border-color: #fbf8f1; }
+  .light-ghost:hover { background: #fbf8f1; color: var(--evergreen); }
+</style>

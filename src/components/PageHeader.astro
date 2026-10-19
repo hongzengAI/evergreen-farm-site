@@ -1,0 +1,21 @@
+---
+import Landscape from './Landscape.astro';
+interface Props { eyebrow: string; title: string }
+const { eyebrow, title } = Astro.props;
+---
+<header class="page-header">
+  <div class="wrap">
+    <p class="eyebrow">{eyebrow}</p>
+    <h1>{title}</h1>
+    <slot />
+  </div>
+  <div class="ridge" aria-hidden="true"><Landscape sun={false} sky={false} /></div>
+</header>
+
+<style>
+  .page-header { position: relative; background: linear-gradient(#f6eedd, #f2e3c4); padding-top: clamp(48px, 8vw, 96px); overflow: hidden; }
+  .page-header h1 { max-width: 18ch; }
+  .page-header :global(.lead) { margin-bottom: 0; }
+  .ridge { height: clamp(120px, 17vw, 250px); margin-top: clamp(28px, 5vw, 56px); position: relative; }
+  .ridge :global(svg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>

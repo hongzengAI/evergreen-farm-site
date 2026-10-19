@@ -1,0 +1,87 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Fact from '../components/Fact.astro';
+import { url } from '../config';
+
+// Answers are the facts' own sentences from facts.yaml, so the site and the AI replies say the
+// same thing. No FAQPage structured data: Google stopped showing FAQ rich results in 2026.
+const groups = [
+  { title: 'Dates and guests', items: [
+    { q: 'How many guests can you host?', id: 'capacity.max_guests' },
+    { q: 'Do you host more than one wedding a weekend?', id: 'schedule.one_wedding_per_weekend' },
+    { q: 'How long is a weekend package?', id: 'schedule.weekend_span' },
+    { q: 'How far ahead should we book?', id: 'booking.lead_time' },
+  ] },
+  { title: 'Food and drink', items: [
+    { q: 'Can we choose our own caterer?', id: 'catering.external' },
+    { q: 'What is your alcohol policy?', id: 'rules.alcohol', label: 'Bring your own, licensed bartender, insurance' },
+  ] },
+  { title: 'Staying on the farm', items: [
+    { q: 'Can our guests stay on site?', id: 'lodging.available' },
+    { q: 'How many people does the Residence sleep?', id: 'lodging.residence_details', label: 'Bedrooms, sleeps, check-in and check-out' },
+  ] },
+  { title: 'Booking and payment', items: [
+    { q: 'How do we reserve our date?', id: 'payment.structure' },
+    { q: 'How can we pay?', id: 'payment.methods' },
+    { q: 'What is your cancellation policy?', id: 'rules.cancellation', label: 'Cancellation and rescheduling policy' },
+  ] },
+  { title: 'On the day', items: [
+    { q: 'What time does the music end?', id: 'rules.end_time', label: 'Music and event end time' },
+    { q: 'What happens if it rains?', id: 'spaces.rain_plan', label: 'Rain plan and indoor capacity' },
+    { q: 'Do you have rules for vendors?', id: 'rules.vendors', label: 'Vendor requirements: insurance, approved lists' },
+    { q: 'Are there decor restrictions?', id: 'rules.decor', label: 'Open flames, sparklers, confetti' },
+    { q: 'Can our dog be part of the ceremony?', id: 'rules.pets', label: 'Pets at the ceremony' },
+    { q: 'Do we need event insurance?', id: 'rules.insurance', label: 'Event liability insurance' },
+    { q: 'Where do guests park?', id: 'spaces.parking', label: 'Parking spaces and shuttles' },
+    { q: 'Is the farm accessible?', id: 'access.accessibility', label: 'Accessible paths and facilities' },
+    { q: 'What power, water and Wi-Fi is there for vendors?', id: 'access.utilities', label: 'Power, water and Wi-Fi' },
+  ] },
+  { title: 'Getting in touch', items: [
+    { q: 'What is the best way to reach you?', id: 'contact.email_only' },
+  ] },
+];
+---
+<Base title="Questions and answers" description="Answers to common questions about Evergreen Farm: guest count, weekend packages, catering, lodging, booking, payment and the wedding day.">
+  <PageHeader eyebrow="FAQ" title="Questions couples ask us">
+    <p class="lead">If your question isn't here, <a href={url('/inquire/')}>send it with your inquiry</a> and we'll answer by email.</p>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap faq">
+      <nav class="jump" aria-label="FAQ topics">
+        {groups.map((g, i) => <a href={`#g${i}`}>{g.title}</a>)}
+      </nav>
+      <div>
+        {groups.map((g, i) => (
+          <section class="group" id={`g${i}`} aria-labelledby={`g${i}h`}>
+            <h2 id={`g${i}h`}>{g.title}</h2>
+            {g.items.map((it) => (
+              <details>
+                <summary>{it.q}</summary>
+                <div class="answer"><Fact id={it.id} label={it.label} /></div>
+              </details>
+            ))}
+          </section>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .faq { display: grid; gap: 40px; grid-template-columns: 220px 1fr; align-items: start; }
+  .jump { position: sticky; top: 96px; display: grid; gap: 4px; }
+  .jump a { padding: 8px 12px; border-radius: 8px; color: var(--ink-soft); text-decoration: none; }
+  .jump a:hover { background: var(--cream); color: var(--evergreen); }
+  .group { margin-bottom: 40px; }
+  .group h2 { font-size: clamp(1.4rem, 1vw + 1rem, 1.8rem); margin-bottom: 12px; }
+  details { border-bottom: 1px solid var(--line); }
+  summary { cursor: pointer; list-style: none; padding: 18px 40px 18px 0; font-weight: 600; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: ''; position: absolute; right: 8px; top: 50%; width: 10px; height: 10px; border-right: 2px solid var(--moss); border-bottom: 2px solid var(--moss); transform: translateY(-70%) rotate(45deg); transition: transform 0.15s; }
+  details[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
+  .answer { padding: 0 0 18px; color: var(--ink-soft); }
+  .answer :global(p) { margin: 0; }
+  @media (max-width: 860px) { .faq { grid-template-columns: 1fr; } .jump { position: static; display: flex; flex-wrap: wrap; } }
+</style>

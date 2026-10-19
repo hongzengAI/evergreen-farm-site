@@ -1,0 +1,294 @@
+{
+  "generated": {
+    "from": "hongzengAI/evergreenAI",
+    "commit": "2ab0fff",
+    "on": "2026-10-18",
+    "spec_status": "draft",
+    "offers_status": "pending_handbook"
+  },
+  "business": {
+    "name": "Evergreen Farm",
+    "site": "https://EvergreenFarmVenue.com",
+    "email": null,
+    "phone_public": false,
+    "location": {
+      "city": "Charlottesville",
+      "state": "VA",
+      "country": "US",
+      "confirmed": false
+    }
+  },
+  "max_guests": 150,
+  "price_range_usd": {
+    "wedding": [
+      7000,
+      15000
+    ]
+  },
+  "packages": [
+    {
+      "id": "classic-day",
+      "name": "Classic Day",
+      "price_usd": null
+    },
+    {
+      "id": "weekend-lite",
+      "name": "Weekend Lite",
+      "price_usd": null
+    },
+    {
+      "id": "full-weekend",
+      "name": "Full Weekend",
+      "price_usd": null
+    },
+    {
+      "id": "estate-experience",
+      "name": "Estate Experience",
+      "price_usd": null
+    }
+  ],
+  "intake": {
+    "required": [
+      "event_type",
+      "date_or_range",
+      "guest_count",
+      "budget_band",
+      "name",
+      "email"
+    ],
+    "optional": [
+      "phone",
+      "how_heard",
+      "message",
+      "sms_consent"
+    ],
+    "how_heard": [
+      "google",
+      "instagram",
+      "tiktok",
+      "youtube",
+      "vrbo",
+      "friend_or_vendor",
+      "other"
+    ],
+    "how_heard_confirmed": false,
+    "budget_bands_usd": {
+      "wedding": [
+        [
+          0,
+          7000
+        ],
+        [
+          7000,
+          10000
+        ],
+        [
+          10000,
+          15000
+        ],
+        [
+          15000,
+          null
+        ]
+      ],
+      "small_event": [
+        [
+          0,
+          1500
+        ],
+        [
+          1500,
+          3000
+        ],
+        [
+          3000,
+          6000
+        ],
+        [
+          6000,
+          null
+        ]
+      ]
+    }
+  },
+  "facts": {
+    "capacity.max_guests": {
+      "en": "Evergreen Farm hosts events for up to 150 guests.",
+      "confirmed": true
+    },
+    "pricing.wedding_range": {
+      "en": "Wedding packages range from $7,000 to $15,000.",
+      "confirmed": true
+    },
+    "packages.names": {
+      "en": "We offer four wedding packages: Classic Day, Weekend Lite, Full Weekend and Estate Experience.",
+      "confirmed": true
+    },
+    "schedule.weekend_span": {
+      "en": "Weekend wedding packages give you the farm from Friday through Sunday, with Monday available as an extension.",
+      "confirmed": true
+    },
+    "schedule.one_wedding_per_weekend": {
+      "en": "We host only one wedding per weekend, so the farm is yours for the whole stay.",
+      "confirmed": true
+    },
+    "lodging.available": {
+      "en": "On-site lodging at the Residence is available to event guests and can be combined with a venue package.",
+      "confirmed": true
+    },
+    "catering.external": {
+      "en": "Catering is arranged by you with a caterer of your choice. We're happy to share a list of local caterers we recommend.",
+      "confirmed": true
+    },
+    "payment.methods": {
+      "en": "We accept bank transfer, Zelle and checks. Card payment is available through a Square invoice; the card processing fee is added to the invoice.",
+      "confirmed": true
+    },
+    "payment.structure": {
+      "en": "Bookings are secured with a deposit, with the balance and a refundable damage deposit due before the event.",
+      "confirmed": true
+    },
+    "contact.email_only": {
+      "en": "The best way to reach us is by email; we reply quickly.",
+      "confirmed": true
+    },
+    "booking.lead_time": {
+      "en": "Most couples book their date 12 to 18 months ahead; popular spring and fall Saturdays go first.",
+      "confirmed": true
+    },
+    "location.area": {
+      "en": "Evergreen Farm is a farm wedding venue in the Charlottesville, Virginia area.",
+      "confirmed": false
+    },
+    "location.address": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "场地详细地址、从 Charlottesville 市区的车程？"
+    },
+    "location.directions": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "导航要点：路口、未铺装路段、手机信号？"
+    },
+    "location.nearby": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "最近的酒店、机场和车程？"
+    },
+    "spaces.ceremony": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "仪式场地有哪些，各容纳多少人？"
+    },
+    "spaces.reception": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "宴会场地（谷仓/帐篷/室外）和容量？"
+    },
+    "spaces.rain_plan": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "下雨时的备用方案？室内空间容量？"
+    },
+    "spaces.getting_ready": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "新人化妆准备的房间？"
+    },
+    "spaces.restrooms": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "洗手间数量和位置？"
+    },
+    "spaces.parking": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "停车位数量，是否需要摆渡车？"
+    },
+    "inclusions.furniture": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "套餐包含哪些桌椅、桌布、餐具？"
+    },
+    "inclusions.setup_teardown": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "布置和撤场的时间窗口，由谁负责？"
+    },
+    "inclusions.rehearsal": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "是否包含彩排时间、彩排晚宴场地？"
+    },
+    "inclusions.staff": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "活动当天是否有场地负责人在场？"
+    },
+    "rules.end_time": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "音乐和活动结束时间（噪音规定）？"
+    },
+    "rules.alcohol": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "酒水政策：自带、需持证酒保、保险？"
+    },
+    "rules.vendors": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "对供应商的要求（保险、名单限制）？"
+    },
+    "rules.decor": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "装饰限制：明火、烟花、彩纸？"
+    },
+    "rules.pets": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "是否允许宠物参加仪式？"
+    },
+    "rules.insurance": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "是否要求客人购买活动责任险？"
+    },
+    "rules.cancellation": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "取消和改期政策？"
+    },
+    "access.accessibility": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "无障碍通道和设施？"
+    },
+    "access.utilities": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "电力、用水、Wi-Fi 情况（供应商会问）？"
+    },
+    "lodging.residence_details": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "Residence 几间卧室、可住几人、入住退房时间？"
+    },
+    "lodging.residence_rate": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "Residence 提供给活动客人的价格或是否含在套餐内？"
+    },
+    "small_events.offer": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "小型活动和公司活动的标准报价方式（按人数、时长）？"
+    },
+    "brand.story": {
+      "en": null,
+      "confirmed": false,
+      "ask_zh": "农场的故事：历史、家庭、为什么做场地？用于简介和文章。"
+    }
+  }
+}

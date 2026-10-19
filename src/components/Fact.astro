@@ -1,0 +1,32 @@
+---
+// Gate customer-facing copy on facts from the business SSOT.
+//   <Fact id="x" />                → the fact's own sentence, or a "to confirm" block
+//   <Fact id="x">copy</Fact>        → the copy, highlighted as unconfirmed in preview
+//   <Fact ids={["a","b"]}>copy</Fact> → the copy only counts as confirmed when every id is
+// Anything unconfirmed carries data-pending, which blocks a production build (check-site.mjs).
+import { fact } from '../data/site';
+import Pending from './Pending.astro';
+
+interface Props { id?: string; ids?: string[]; inline?: boolean; label?: string }
+const { id, ids = [], inline = false, label } = Astro.props;
+const all = id ? [id, ...ids] : ids;
+const facts = all.map(fact);
+const ok = facts.every((f) => f.confirmed);
+const hasSlot = Astro.slots.has('default');
+const own = id ? fact(id) : undefined;
+const pendingIds = all.filter((_, i) => !facts[i].confirmed).join(' ');
+const zh = facts.find((f) => !f.confirmed && f.ask_zh)?.ask_zh;
+const Tag = inline ? 'span' : 'p';
+---
+{ok && hasSlot && <slot />}
+{ok && !hasSlot && own && <Tag>{own.en}</Tag>}
+{!ok && hasSlot && (
+  inline
+    ? <mark class="pending-mark" data-pending={pendingIds} title="To confirm · 待确认"><slot /></mark>
+    : <div class="pending-mark-block" data-pending={pendingIds}><slot /></div>
+)}
+{!ok && !hasSlot && <Pending id={pendingIds} label={label ?? own?.en ?? pendingIds} zh={zh} inline={inline} />}
+
+<style>
+  .pending-mark-block { border-left: 3px dotted var(--pending); padding-left: 14px; background: linear-gradient(90deg, var(--pending-bg), transparent 70%); border-radius: 2px; }
+</style>

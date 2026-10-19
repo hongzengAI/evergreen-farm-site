@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Fact from '../components/Fact.astro';
+import Photo from '../components/Photo.astro';
+import { url, tourHref } from '../config';
+import { maxGuests } from '../data/site';
+
+const kinds = [
+  { title: 'Birthdays and milestones', text: 'Big birthdays, anniversaries and retirements, with room to spread out on the lawn.' },
+  { title: 'Showers and engagement parties', text: 'An afternoon on the farm for the people closest to you.' },
+  { title: 'Reunions and family gatherings', text: 'Space for every generation, and lodging for the ones coming from far away.' },
+  { title: 'Company days and retreats', text: 'A day away from the office for your team, a client gathering or a holiday party.' },
+];
+---
+<Base title="Celebrations and events" description={`Birthday parties, showers, reunions and company gatherings on the farm for up to ${maxGuests} guests. Bring your own caterer; lodging available on site.`}>
+  <PageHeader eyebrow="Celebrations & gatherings" title="Room to celebrate anything">
+    <Fact id="capacity.max_guests"><p class="lead">Birthdays, showers, reunions and company days for up to {maxGuests} guests.</p></Fact>
+  </PageHeader>
+
+  <section class="section" aria-labelledby="kinds-h">
+    <h2 id="kinds-h" class="sr-only">Kinds of celebrations</h2>
+    <div class="wrap grid four">
+      {kinds.map((k) => (
+        <article class="card">
+          <h3>{k.title}</h3>
+          <p>{k.text}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap split">
+      <Photo slot="celebration" alt="Guests at a celebration on the farm" caption="Birthday party: long tables, guests mid-laugh, string lights" required />
+      <div>
+        <p class="eyebrow">Planning your event</p>
+        <h2>How it works</h2>
+        <Fact id="small_events.offer" label="How events are priced: by number of guests and hours" />
+        <ul class="check">
+          <li><Fact id="capacity.max_guests" inline>Up to {maxGuests} guests</Fact></li>
+          <li><Fact id="catering.external" inline>Bring the caterer of your choice; we'll share local favorites</Fact></li>
+          <li><Fact id="lodging.available" inline>Lodging for guests at the Residence</Fact></li>
+          <li>Ask about weekday dates</li>
+        </ul>
+        <div class="actions">
+          <a class="btn" href={url('/inquire/?type=small_event')}>Inquire about an event</a>
+          <a class="btn ghost" href={tourHref}>Book a tour</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>

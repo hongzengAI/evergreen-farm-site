@@ -1,0 +1,178 @@
+---
+import Base from '../layouts/Base.astro';
+import Fact from '../components/Fact.astro';
+import Photo from '../components/Photo.astro';
+import Landscape from '../components/Landscape.astro';
+import { url, tourHref } from '../config';
+import { fact, packages, usd, weddingMin, weddingMax, maxGuests, place } from '../data/site';
+
+const year = new Date().getFullYear();
+const bookingYears = `${year + 1} and ${year + 2}`;
+const highlights = [
+  { id: 'schedule.one_wedding_per_weekend', title: 'One wedding per weekend', icon: 'M12 3l7 4v6c0 4-3 7-7 8-4-1-7-4-7-8V7z' },
+  { id: 'capacity.max_guests', title: `Up to ${maxGuests} guests`, icon: 'M8 11a3 3 0 100-6 3 3 0 000 6zm8 0a3 3 0 100-6 3 3 0 000 6zM2 20c0-3 3-5 6-5s6 2 6 5M14 15c3 0 8 1 8 5' },
+  { id: 'lodging.available', title: 'Stay on the farm', icon: 'M3 11l9-7 9 7v9H3zM9 20v-6h6v6' },
+  { id: 'catering.external', title: 'Your caterer, your menu', icon: 'M7 3v8a2 2 0 002 2v8M11 3v8M3 3v8a4 4 0 004 4M17 3c-2 2-2 6 0 8v10' },
+];
+const days = [
+  { d: 'Friday', t: 'Your weekend begins' },
+  { d: 'Saturday', t: 'Celebrate' },
+  { d: 'Sunday', t: 'Linger a little longer' },
+  { d: 'Monday', t: 'Optional extra day', optional: true },
+];
+---
+<Base title="Evergreen Farm" description={`A farm wedding and event venue near ${place.short}. One wedding per weekend, up to ${maxGuests} guests, lodging on site. Wedding packages from ${usd(weddingMin)} to ${usd(weddingMax)}.`}>
+  <section class="hero">
+    <div class="wrap hero-copy">
+      <p class="eyebrow">Farm weddings &amp; celebrations · <Fact id="location.area" inline>near {place.short}</Fact></p>
+      <h1>The whole farm.<br />The whole weekend.</h1>
+      <Fact ids={['schedule.one_wedding_per_weekend', 'capacity.max_guests', 'lodging.available']}>
+        <p class="lead">We host one wedding per weekend for up to {maxGuests} guests, with a place for your people to stay right on the farm.</p>
+      </Fact>
+      <div class="actions">
+        <a class="btn" href={url('/availability/')}>Check availability</a>
+        <a class="btn ghost" href={tourHref}>Book a tour</a>
+      </div>
+      <p class="booking-note small">Now booking {bookingYears}</p>
+    </div>
+    <div class="hero-ridge" aria-hidden="true"><Landscape sky={false} /></div>
+  </section>
+
+  <section class="section" aria-labelledby="why-h">
+    <h2 id="why-h" class="sr-only">Why Evergreen Farm</h2>
+    <div class="wrap grid four">
+      {highlights.map((h) => (
+        <div class="highlight">
+          <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d={h.icon} fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <h3>{h.title}</h3>
+          <Fact id={h.id} />
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Weddings</p>
+        <h2>Four ways to celebrate</h2>
+        <Fact id="pricing.wedding_range">
+          <p class="lead">Wedding packages range from {usd(weddingMin)} to {usd(weddingMax)}, from a single day to a long weekend on the farm.</p>
+        </Fact>
+        <ol class="packages">
+          {packages.map((p, i) => <li><span class="n">0{i + 1}</span>{p.name}</li>)}
+        </ol>
+        <div class="actions"><a class="btn ghost" href={url('/weddings/')}>Explore weddings</a></div>
+      </div>
+      <Photo slot="ceremony" alt="A ceremony on the farm in late-afternoon light" caption="Ceremony site, late-afternoon light, guests seated" required />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="center">
+        <p class="eyebrow">Weekend packages</p>
+        <h2>Friday through Sunday is yours</h2>
+        <Fact id="schedule.weekend_span"><p class="lead">Weekend packages give you the farm from Friday through Sunday, and Monday can be added as an extension.</p></Fact>
+      </div>
+      <ol class="weekend" aria-label="A weekend at Evergreen Farm">
+        {days.map((x) => (
+          <li class={x.optional ? 'optional' : ''}>
+            <span class="day">{x.d}</span>
+            <span class="what">{x.t}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section tint">
+    <div class="wrap split">
+      <Photo slot="residence" alt="The Residence, on-site lodging at Evergreen Farm" caption="The Residence from outside, warm evening light" required />
+      <div>
+        <p class="eyebrow">Lodging</p>
+        <h2>Stay where you celebrate</h2>
+        <Fact id="lodging.available" />
+        <Fact id="lodging.residence_details" label="Bedrooms, how many it sleeps, check-in and check-out" />
+        <div class="actions"><a class="btn ghost" href={url('/the-farm/#residence')}>About the Residence</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">Celebrations &amp; gatherings</p>
+        <h2>Birthdays, showers, reunions and company days</h2>
+        <Fact id="capacity.max_guests"><p>The farm hosts gatherings of every kind for up to {maxGuests} guests. Bring your own caterer and make the day your own.</p></Fact>
+        <div class="actions"><a class="btn ghost" href={url('/events/')}>Plan an event</a></div>
+      </div>
+      <Photo slot="celebration" alt="Guests at a celebration on the farm" caption="Birthday party: long tables, guests mid-laugh, string lights" required />
+    </div>
+  </section>
+
+  <section class="section gallery-strip">
+    <div class="wrap">
+      <div class="strip">
+        <Photo slot="detail-table" alt="Table setting detail" caption="Table details: linens, flowers, place cards" ratio="3 / 4" />
+        <Photo slot="couple-field" alt="A couple walking through the field" caption="Couple walking through the field at golden hour" ratio="3 / 4" />
+        <Photo slot="evening-lights" alt="The farm lit up after dark" caption="Reception after dark, lights glowing" ratio="3 / 4" />
+      </div>
+      <p class="center"><a href={url('/gallery/')}>See the gallery →</a></p>
+    </div>
+  </section>
+
+  <section class="section dark">
+    <div class="wrap center">
+      <h2>Plan ahead for spring and fall</h2>
+      <Fact id="booking.lead_time"><p class="lead light">Most couples book their date 12 to 18 months ahead, and popular spring and fall Saturdays go first.</p></Fact>
+      <div class="actions centered">
+        <a class="btn light" href={url('/availability/')}>Check availability</a>
+        <a class="btn ghost light-ghost" href={url('/inquire/')}>Send an inquiry</a>
+      </div>
+      <p class="small">{fact('contact.email_only').confirmed ? fact('contact.email_only').en : ''}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero { position: relative; overflow: hidden; background: linear-gradient(#f6eedd, #f2e2c1); }
+  .hero-copy { position: relative; z-index: 1; padding-top: clamp(48px, 9vh, 112px); }
+  .hero-ridge { position: relative; height: clamp(200px, 27vw, 400px); margin-top: clamp(-120px, -6vw, -40px); }
+  .hero-ridge :global(svg) { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero h1 { max-width: 14ch; }
+  .hero .lead { color: var(--ink-soft); }
+  .booking-note { margin-top: 18px; color: var(--evergreen-2); font-weight: 600; letter-spacing: 0.02em; }
+
+  .highlight { padding: 4px 0; }
+  .highlight svg { color: var(--wheat); margin-bottom: 14px; }
+  .highlight h3 { font-size: 1.3rem; }
+  .highlight :global(p) { color: var(--ink-soft); font-size: 0.98rem; }
+
+  .packages { list-style: none; padding: 0; margin: 8px 0 0; display: grid; gap: 0; border-top: 1px solid var(--line); }
+  .packages li { display: flex; align-items: baseline; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font: 450 1.3rem/1.2 var(--serif); color: var(--evergreen); }
+  .packages .n { font: 600 0.78rem/1 var(--sans); color: var(--wheat); letter-spacing: 0.08em; }
+
+  .weekend { list-style: none; padding: 0; margin: 40px 0 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; }
+  .weekend::before { content: ''; position: absolute; left: 12.5%; right: 12.5%; top: 11px; border-top: 2px solid var(--moss); }
+  .weekend li { position: relative; text-align: center; padding-top: 36px; display: grid; gap: 4px; }
+  .weekend li::before { content: ''; position: absolute; top: 2px; left: calc(50% - 10px); width: 20px; height: 20px; border-radius: 50%; background: var(--evergreen); box-shadow: 0 0 0 5px var(--paper); }
+  .weekend li.optional::before { background: var(--paper); border: 2px dashed var(--moss); }
+  .weekend .day { font: 500 1.35rem/1.2 var(--serif); color: var(--evergreen); }
+  .weekend .what { color: var(--muted); font-size: 0.95rem; }
+  @media (max-width: 640px) {
+    .weekend { grid-template-columns: 1fr; gap: 18px; }
+    .weekend::before { left: 11px; right: auto; top: 12px; bottom: 12px; border-top: 0; border-left: 2px solid var(--moss); }
+    .weekend li { text-align: left; padding: 0 0 0 44px; }
+    .weekend li::before { top: 4px; left: 1px; }
+  }
+
+  .gallery-strip { padding-top: 0; }
+  .strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(10px, 2vw, 20px); margin-bottom: 20px; }
+  @media (max-width: 640px) { .strip { grid-template-columns: 1fr 1fr; } .strip > :last-child { display: none; } }
+
+  .dark .lead.light, .dark .small { color: #d9dfd5; }
+  .actions.centered { justify-content: center; }
+  .light-ghost { color: #fbf8f1; border-color: #fbf8f1; }
+  .light-ghost:hover { background: #fbf8f1; color: var(--evergreen); }
+</style>

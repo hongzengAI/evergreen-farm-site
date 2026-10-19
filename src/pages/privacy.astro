@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Pending from '../components/Pending.astro';
+import { url } from '../config';
+import { business } from '../data/site';
+
+const email = business.business.email;
+---
+<Base title="Privacy policy" description="How Evergreen Farm collects, uses and protects the information you share through our website, inquiry form, email and text messages.">
+  <PageHeader eyebrow="Policies" title="Privacy policy">
+    <p class="lead">This policy explains what we collect when you visit our website or contact us, and how we use it.</p>
+  </PageHeader>
+
+  <section class="section">
+    <div class="wrap prose">
+      <Pending id="legal.review" label="Draft legal text. Have it reviewed, then set the effective date, before launch." zh="法律文本草稿，上线前需审阅并填写生效日期" />
+
+      <h2>Who we are</h2>
+      <p>Evergreen Farm is a wedding and event venue in Virginia. In this policy, "we" and "us" mean Evergreen Farm. You can reach us at {email ? <a href={`mailto:${email}`}>{email}</a> : <Pending id="business.email" label="venue email address" inline />}.</p>
+
+      <h2>What we collect</h2>
+      <ul>
+        <li><strong>What you tell us.</strong> When you send an inquiry: your name, email, phone number if you give it, your event type, date, guest count, budget range, how you heard about us and your message. We also keep the emails and texts you send us.</li>
+        <li><strong>How you found us.</strong> If you arrived from a link with campaign tags (such as utm_source) or from another website, the form sends that along with your inquiry so we know which channels work.</li>
+        <li><strong>Website analytics.</strong> We use Google Analytics, which uses cookies to tell us which pages are visited, what kind of device and browser are used, the approximate location (city level) and the referring site.</li>
+      </ul>
+
+      <h2>How we use it</h2>
+      <ul>
+        <li>To reply to your inquiry, schedule tours, prepare quotes and contracts, and send reminders about your event.</li>
+        <li>To follow up if we haven't heard back. Every follow-up email lets you tell us to stop.</li>
+        <li>To understand how people find us and improve the website.</li>
+      </ul>
+      <p>We use software to organize inquiries and to help us draft replies, including AI tools. The confirmation you receive right after an inquiry is a standard message; personal replies are reviewed by our team before they're sent.</p>
+
+      <h2>Who we share it with</h2>
+      <p>We do not sell or rent your personal information. We share it only with service providers that work on our behalf and only for the purposes above: our website and inquiry-system hosting, Google Workspace (email, calendar and spreadsheets), Google Analytics, an AI service used to help draft replies, our text-message provider if you opt in to texts, Square if you choose to pay by card, and our e-signature service for contracts. We may also disclose information if the law requires it.</p>
+
+      <h2>Text messages</h2>
+      <p>We text you only if you check the box on our form or otherwise agree to texts. Mobile information will not be shared with third parties or affiliates for marketing or promotional purposes. Text messaging opt-in data and consent will not be shared with any third parties, except service providers that deliver the messages for us. See our <a href={url('/sms-terms/')}>SMS terms</a>.</p>
+
+      <h2>Your choices</h2>
+      <ul>
+        <li>Reply to any of our emails to ask us to stop following up, or use the unsubscribe link where there is one.</li>
+        <li>Reply STOP to any text to stop texts.</li>
+        <li>Email us to see, correct or delete the information we hold about you.</li>
+        <li>You can block or delete cookies in your browser, or install Google's <a href="https://tools.google.com/dlpage/gaoptout" rel="noopener">Analytics opt-out add-on</a>.</li>
+      </ul>
+
+      <h2>Do Not Track</h2>
+      <p>Our website does not currently respond to browser "Do Not Track" signals.</p>
+
+      <h2>How long we keep it</h2>
+      <p>We keep inquiry and booking records for as long as we need them to respond to you, deliver your event and keep business records. We keep records of text-message opt-outs for as long as the law requires.</p>
+
+      <h2>Children</h2>
+      <p>Our website is not directed to children under 13, and we do not knowingly collect their information.</p>
+
+      <h2>Security</h2>
+      <p>We use reasonable safeguards to protect your information. No website or email system is completely secure, so please don't send sensitive information such as card numbers through our form.</p>
+
+      <h2>Changes</h2>
+      <p>If we change this policy, we'll post the new version here and update the effective date.</p>
+      <p class="muted">Effective date: <Pending id="legal.review" label="set at launch" inline /></p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .prose { max-width: 760px; }
+  .prose h2 { font-size: clamp(1.35rem, 1vw + 1rem, 1.7rem); margin-top: 1.8em; }
+  .prose ul { padding-left: 1.2em; display: grid; gap: 8px; margin: 0 0 1em; }
+  .prose li { max-width: 68ch; }
+</style>
